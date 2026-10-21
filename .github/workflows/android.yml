@@ -28,7 +28,7 @@ jobs:
           java-version: 17
 
       - name: Install
-        run: npm ci
+        run: npm install --legacy-peer-deps
 
       - name: Build web assets
         run: npm run build

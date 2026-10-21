@@ -14,7 +14,7 @@ const dir = join(root, '.github', 'workflows');
 const EXPECT = {
   'web.yml': {
     jobs: ['build', 'deploy'],
-    stepsContain: ['npm ci', 'npm test', 'npm run build', 'actions/deploy-pages']
+    stepsContain: ['npm install', 'npm test', 'npm run build', 'actions/deploy-pages']
   },
   'android.yml': {
     jobs: ['apk'],
