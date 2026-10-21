@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">ChessLens AR</string>
+    <string name="title_activity_main">ChessLens AR</string>
+    <string name="package_name">app.chesslens.ar</string>
+    <string name="custom_url_scheme">app.chesslens.ar</string>
+</resources>

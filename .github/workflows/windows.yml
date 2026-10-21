@@ -1,0 +1,40 @@
+# Portable exe + NSIS installer via electron-builder on a Windows runner.
+name: windows
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  exe:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Build web assets
+        run: npm run build
+
+      - name: Bundle Electron main/preload
+        run: npm run build:electron
+
+      - name: Package Windows app
+        run: npx electron-builder --win
+
+      - name: Upload portable exe + installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: chesslens-windows
+          path: |
+            release/*portable*.exe
+            release/*setup*.exe
+          if-no-files-found: error

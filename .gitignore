@@ -1,0 +1,12 @@
+node_modules/
+dist/
+dev-dist/
+release/
+electron/dist/
+ios/
+*.local
+.DS_Store
+public/engine/*.wasm
+public/engine/*.js
+electron/dist/
+release/

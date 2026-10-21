@@ -1,0 +1,32 @@
+ChessLens AR
+Copyright (C) 2026 ChessLens AR contributors
+
+This product is licensed under the GNU General Public License v3.0
+(see LICENSE, or <https://www.gnu.org/licenses/gpl-3.0.html>).
+
+This product includes and credits the following third-party works:
+
+1. Stockfish / Stockfish.js 19
+   - Chess engine (c) T. Romstad, M. Costalba, Y. Kiiski, G. Linscott and
+     contributors; Stockfish.js port (c) Chess.com, LLC / nmrugg.
+   - Licensed under the GNU General Public License v3.0.
+   - We ship the lite single-threaded WebAssembly build
+     (stockfish-19-lite-single.js/.wasm) plus the asm.js fallback
+     (stockfish-19-asm.js) in public/engine/, together with its Copying.txt.
+   - Neural network weights by Chris Bao (sscg13).
+   - Source: https://github.com/official-stockfish/Stockfish
+             https://github.com/nmrugg/stockfish.js
+
+2. chess.js
+   - Chess rules / move generation / SAN / FEN / PGN library
+     (c) Jeff Hlywa (@jhlywa), BSD-2-Clause license.
+   - Source: https://github.com/jhlywa/chess.js
+
+3. Capacitor (Apache-2.0), Electron (MIT), electron-builder (MIT),
+   Vite (MIT), Vitest (MIT), ESLint (MIT), TypeScript (Apache-2.0),
+   workbox (MIT) - build/tooling dependencies only; see package.json.
+
+GPL-3.0 notice: if you modify this program and convey it, you must keep the
+notices intact and provide the Corresponding Source as described in the
+license. The engine binaries in public/engine/ are Conveyed verbatim under
+their own GPL-3.0 terms (Copying.txt included alongside them).

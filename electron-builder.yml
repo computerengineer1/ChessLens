@@ -1,0 +1,39 @@
+appId: app.chesslens.ar
+productName: ChessLens AR
+copyright: Copyright © 2026 ChessLens AR contributors (GPL-3.0-only)
+
+directories:
+  buildResources: assets
+  output: release
+
+files:
+  - dist/**
+  - electron/dist/**
+  - package.json
+
+asar: true
+
+win:
+  icon: assets/icon.ico
+  target:
+    - target: portable
+      arch: [x64]
+    - target: nsis
+      arch: [x64]
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  deleteAppDataOnUninstall: false
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: ChessLens AR
+
+linux:
+  icon: assets/icon.png
+  target:
+    - target: AppImage
+      arch: [x64]
+  category: Game
+  artifactName: ChessLensAR-${version}-linux-${arch}.${ext}

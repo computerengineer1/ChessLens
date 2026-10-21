@@ -1,0 +1,49 @@
+# On every v* tag: build Android APK, unsigned iOS IPA and Windows exes,
+# then attach them to a GitHub Release. Everything free-tier.
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  android:
+    uses: ./.github/workflows/android.yml
+    secrets: inherit
+
+  ios:
+    uses: ./.github/workflows/ios.yml
+    secrets: inherit
+
+  windows:
+    uses: ./.github/workflows/windows.yml
+    secrets: inherit
+
+  publish:
+    needs: [android, ios, windows]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: false
+
+      - name: Collect binaries
+        run: |
+          mkdir -p out
+          find artifacts -type f \( -name '*.apk' -o -name '*.ipa' -o -name '*.exe' \) -exec cp {} out/ \;
+          ls -la out
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: out/*
+          generate_release_notes: true
+          draft: false
+          prerelease: false

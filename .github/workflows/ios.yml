@@ -1,0 +1,67 @@
+# Unsigned iOS archive + IPA on a macOS runner (no Apple Developer account
+# needed). Install the IPA with Sideloadly/AltStore using a free Apple ID.
+name: ios
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  ipa:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Build web assets
+        run: npm run build
+
+      - name: Add iOS platform when missing, then sync
+        run: |
+          if [ ! -d ios/App ]; then
+            npx cap add ios
+          fi
+          npx cap sync ios
+          node scripts/patch-ios-plist.mjs
+
+      - name: Archive (unsigned)
+        run: |
+          cd ios/App
+          if [ -d App.xcworkspace ]; then
+            PROJ="-workspace App.xcworkspace"
+          else
+            PROJ="-project App.xcodeproj"
+          fi
+          xcodebuild archive \
+            $PROJ \
+            -scheme App \
+            -configuration Release \
+            -sdk iphoneos \
+            -archivePath "$RUNNER_TEMP/App.xcarchive" \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Package unsigned IPA
+        run: |
+          mkdir -p "$RUNNER_TEMP/Payload"
+          cp -R "$RUNNER_TEMP/App.xcarchive/Products/Applications/App.app" "$RUNNER_TEMP/Payload/"
+          cd "$RUNNER_TEMP"
+          zip -qr ChessLens-unsigned.ipa Payload
+          mv ChessLens-unsigned.ipa "$GITHUB_WORKSPACE/"
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: chesslens-ios-unsigned
+          path: ChessLens-unsigned.ipa
+          if-no-files-found: error
